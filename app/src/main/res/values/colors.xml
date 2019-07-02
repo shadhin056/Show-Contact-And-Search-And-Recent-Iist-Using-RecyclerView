@@ -14,4 +14,5 @@
     <color name="list_row_hover_end_color">#ebeef0</color>
     <color name="contact_name">#333333</color>
     <color name="contact_number">#8c8c8c</color>
+    <color name="black">#160101</color>
 </resources>
