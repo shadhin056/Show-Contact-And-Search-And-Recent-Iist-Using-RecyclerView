@@ -42,20 +42,15 @@ public class MainActivity extends AppCompatActivity {
         StoreContacts = new ArrayList<String>();
 
         EnableRuntimePermission();
+        GetContactsIntoArrayList();
 
+
+        listView.setAdapter(arrayAdapter);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                GetContactsIntoArrayList();
 
-                arrayAdapter = new ArrayAdapter<String>(
-                        MainActivity.this,
-                        R.layout.contact_items_listview,
-                        R.id.textView, StoreContacts
-                );
-
-                listView.setAdapter(arrayAdapter);
 
 
             }

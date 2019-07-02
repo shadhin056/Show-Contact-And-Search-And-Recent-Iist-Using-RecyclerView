@@ -4,7 +4,6 @@
     android:id="@+id/activity_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.android_examples.contactsinlistview_android_examplescom.MainActivity"
     android:background="#FFF9C4"
     android:padding="4dp"
     android:orientation="vertical">
