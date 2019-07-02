@@ -68,11 +68,15 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.MyView
         final Contact contact = contactListFiltered.get(position);
         holder.name.setText(contact.getName());
         holder.phone.setText(contact.getPhone());
+        if ((contact.getImage()==null)){
+            holder.thumbnail.setImageResource(R.drawable.avater);
+        }else {
+            Glide.with(context)
+                    .load(contact.getImage())
+                    .apply(RequestOptions.circleCropTransform())
+                    .into(holder.thumbnail);
+        }
 
-        Glide.with(context)
-                .load(contact.getImage())
-                .apply(RequestOptions.circleCropTransform())
-                .into(holder.thumbnail);
     }
 
     @Override

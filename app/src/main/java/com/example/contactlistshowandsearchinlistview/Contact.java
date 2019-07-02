@@ -2,7 +2,7 @@ package com.example.contactlistshowandsearchinlistview;
 
 public class Contact {
     String name;
-    String image="iconfinder_search";
+    String image;
     String phone;
 
     public Contact() {
