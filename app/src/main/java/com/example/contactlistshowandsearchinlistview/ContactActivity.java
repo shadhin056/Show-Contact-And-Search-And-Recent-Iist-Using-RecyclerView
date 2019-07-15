@@ -160,38 +160,6 @@ public class ContactActivity extends AppCompatActivity implements ContactsAdapte
 
 
     }
-
-    /*@Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-
-        // Associate searchable configuration with the SearchView
-        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-        searchView = (SearchView) menu.findItem(R.id.action_search)
-                .getActionView();
-        searchView.setSearchableInfo(searchManager
-                .getSearchableInfo(getComponentName()));
-        searchView.setMaxWidth(Integer.MAX_VALUE);
-
-        // listening to search query text change
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                // filter recycler view when query submitted
-                mAdapter.getFilter().filter(query);
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String query) {
-                // filter recycler view when text is changed
-                mAdapter.getFilter().filter(query);
-                return false;
-            }
-        });
-        return true;
-    }*/
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -206,17 +174,6 @@ public class ContactActivity extends AppCompatActivity implements ContactsAdapte
 
         return super.onOptionsItemSelected(item);
     }
-
-    /*@Override
-    public void onBackPressed() {
-        // close search view on back button pressed
-        if (!searchView.isIconified()) {
-            searchView.setIconified(true);
-            return;
-        }
-        super.onBackPressed();
-    }*/
-
     private void whiteNotificationBar(View view) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             int flags = view.getSystemUiVisibility();
@@ -225,7 +182,6 @@ public class ContactActivity extends AppCompatActivity implements ContactsAdapte
             getWindow().setStatusBarColor(Color.WHITE);
         }
     }
-
     @Override
     public void onContactSelected(Contact contact) {
         searchView.setText(contact.getPhone());
