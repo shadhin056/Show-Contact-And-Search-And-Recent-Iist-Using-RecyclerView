@@ -6,7 +6,7 @@
     android:clickable="true"
     android:paddingBottom="@dimen/row_padding"
     android:paddingLeft="@dimen/activity_margin"
-    android:paddingRight="@dimen/activity_margin"
+    android:paddingRight="10dp"
     android:paddingTop="@dimen/row_padding">
 
     <ImageView
@@ -40,7 +40,7 @@
         android:layout_height="30dp"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
-        android:background="@drawable/arrow2"
+        android:background="@drawable/arrow"
         android:textColor="@color/contact_number"
         android:textSize="@dimen/contact_number" />
 

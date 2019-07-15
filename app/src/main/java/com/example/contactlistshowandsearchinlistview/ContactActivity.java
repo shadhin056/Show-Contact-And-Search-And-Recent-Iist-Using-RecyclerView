@@ -1,6 +1,7 @@
 package com.example.contactlistshowandsearchinlistview;
 
 import android.app.SearchManager;
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -20,11 +21,14 @@ import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.Toast;
 import com.example.contactlistshowandsearchinlistview.R;
+import com.example.contactlistshowandsearchinlistview.SQLite.DatabaseHelper;
+import com.example.contactlistshowandsearchinlistview.SQLite.SQLiteData;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -33,6 +37,7 @@ import java.util.List;
 
 public class ContactActivity extends AppCompatActivity implements ContactsAdapter.ContactsAdapterListener, ContactsAdapterRecent.ContactsAdapterListener {
     private RecyclerView recyclerView,recycler_view_recent;
+    Button submit;
     private List<Contact> contactList;
     private List<Contact> contactList2;
     private ContactsAdapter mAdapter;
@@ -40,13 +45,15 @@ public class ContactActivity extends AppCompatActivity implements ContactsAdapte
     private EditText searchView;
     String name, phonenumber,image_uri ;
     Cursor cursor ;
+    DatabaseHelper databaseHelper;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_contact);
 
-
+        databaseHelper = new DatabaseHelper(this);
         recyclerView = findViewById(R.id.recycler_view);
+        submit = findViewById(R.id.submit);
         recycler_view_recent = findViewById(R.id.recycler_view_recent);
         contactList = new ArrayList<>();
         contactList2 = new ArrayList<>();
@@ -72,6 +79,19 @@ public class ContactActivity extends AppCompatActivity implements ContactsAdapte
         fetchRecentContacts();
         search();
         searchRecent();
+        submit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                long id= databaseHelper.insertNumber(searchView.getText().toString(),1);
+
+                if (id > 0) {
+                    Toast.makeText(getApplicationContext(), "Data is added and id : " + id, Toast.LENGTH_LONG).show();
+
+                } else {
+                    Toast.makeText(getApplicationContext(), "Can not inserted : ", Toast.LENGTH_LONG).show();
+                }
+            }
+        });
     }
 
     private void fetchRecentContacts() {
