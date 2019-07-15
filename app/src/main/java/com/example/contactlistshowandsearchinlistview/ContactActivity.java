@@ -119,21 +119,23 @@ public class ContactActivity extends AppCompatActivity implements ContactsAdapte
                 //searchView.setText(mobileNumber);
                 phonenumber=mobileNumber;
                 Contact a = new Contact(name, image_uri, phonenumber);
-               // if(phonenumber.equals("01672708329")){
-                    contactList2.add(a);
-               // }else {
 
-                //}
+
+                if(databaseHelper.hasNumber(phonenumber)){
+                    contactList2.add(a);
+                }else {
+                    contactList.add(a);
+                }
             }else if(removeSpecialChar.length()==11){
                 //searchView.setText(removeSpecialChar);
                 phonenumber=removeSpecialChar;
                 Contact a = new Contact(name, image_uri, phonenumber);
 
-               // if(phonenumber.equals("01672708329")){
+                if(databaseHelper.hasNumber(phonenumber)){
                     contactList2.add(a);
-               // }else {
-
-               // }
+                }else {
+                    contactList.add(a);
+                }
             }
             // refreshing recycler view
             mAdapter.notifyDataSetChanged();
@@ -200,21 +202,23 @@ public class ContactActivity extends AppCompatActivity implements ContactsAdapte
                 //searchView.setText(mobileNumber);
                 phonenumber=mobileNumber;
                 Contact a = new Contact(name, image_uri, phonenumber);
-               // if(phonenumber.equals("01672708329")){
 
-                //}else {
+
+                if(databaseHelper.hasNumber(phonenumber)){
+                    contactList2.add(a);
+                }else {
                     contactList.add(a);
-                //}
+                }
             }else if(removeSpecialChar.length()==11){
                 //searchView.setText(removeSpecialChar);
                 phonenumber=removeSpecialChar;
                 Contact a = new Contact(name, image_uri, phonenumber);
 
-               // if(phonenumber.equals("01672708329")){
-
-               // }else {
+                if(databaseHelper.hasNumber(phonenumber)){
+                    contactList2.add(a);
+                }else {
                     contactList.add(a);
-               // }
+                }
             }
             // refreshing recycler view
             mAdapter.notifyDataSetChanged();

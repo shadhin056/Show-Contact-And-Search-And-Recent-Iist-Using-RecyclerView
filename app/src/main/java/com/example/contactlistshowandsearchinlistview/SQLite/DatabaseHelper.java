@@ -58,6 +58,27 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return id;
     }
 
+    public boolean hasNumber(String phonenumber) {
+        List<SQLiteData> datas = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.query(TABLE_NAME,
+                new String[]{SQLiteData.COLUMN_ID, SQLiteData.COLUMN_NUMBER, SQLiteData.COLUMN_PRIORITY},
+                SQLiteData.COLUMN_NUMBER + "=?",
+                new String[]{phonenumber}, null, null, null , "1");
+        // looping through all rows and adding to list
+
+        int count = cursor.getCount();
+        if (cursor != null && count>0 ) {
+            return true;
+        }
+        // close db connection
+        db.close();
+        // return notes list
+        return false;
+    }
+
+
+
    /* public SQLiteData getDataByID(String data) {
         // get readable database as we are not inserting anything
         SQLiteDatabase db = this.getReadableDatabase();

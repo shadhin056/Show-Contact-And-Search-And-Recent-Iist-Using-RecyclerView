@@ -6,12 +6,13 @@
     android:layout_height="match_parent"
     tools:context=".ContactActivity">
 
-    <LinearLayout
-        android:orientation="vertical"
-        android:background="@color/colorPrimary"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
 
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:background="@color/colorPrimary"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
         <LinearLayout
             android:background="@color/white"
             android:orientation="vertical"
@@ -44,9 +45,17 @@
             </android.support.design.widget.TextInputLayout>
             <Button
                 android:id="@+id/submit"
+                android:text="Submit"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
         </LinearLayout>
+                <ScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+                    <LinearLayout
+                        android:orientation="vertical"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
         <LinearLayout
             android:background="@color/white"
             android:orientation="vertical"
@@ -122,6 +131,10 @@
 
 
         </LinearLayout>
+                    </LinearLayout>
+                </ScrollView>
+
+            </LinearLayout>
+
     </LinearLayout>
 
-</LinearLayout>
