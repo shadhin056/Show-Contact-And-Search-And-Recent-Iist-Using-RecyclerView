@@ -31,10 +31,12 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
-public class ContactActivity extends AppCompatActivity implements ContactsAdapter.ContactsAdapterListener {
-    private RecyclerView recyclerView;
+public class ContactActivity extends AppCompatActivity implements ContactsAdapter.ContactsAdapterListener, ContactsAdapterRecent.ContactsAdapterListener {
+    private RecyclerView recyclerView,recycler_view_recent;
     private List<Contact> contactList;
+    private List<Contact> contactList2;
     private ContactsAdapter mAdapter;
+    private ContactsAdapterRecent mAdapterRecent;
     private EditText searchView;
     String name, phonenumber,image_uri ;
     Cursor cursor ;
@@ -45,20 +47,81 @@ public class ContactActivity extends AppCompatActivity implements ContactsAdapte
 
 
         recyclerView = findViewById(R.id.recycler_view);
+        recycler_view_recent = findViewById(R.id.recycler_view_recent);
         contactList = new ArrayList<>();
+        contactList2 = new ArrayList<>();
         mAdapter = new ContactsAdapter(ContactActivity.this, contactList, this);
+        mAdapterRecent = new ContactsAdapterRecent(ContactActivity.this, contactList2, this);
 
         // white background notification bar
         whiteNotificationBar(recyclerView);
+        whiteNotificationBar(recycler_view_recent);
 
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.addItemDecoration(new MyDividerItemDecoration(this, DividerItemDecoration.VERTICAL, 36));
         recyclerView.setAdapter(mAdapter);
+
+       RecyclerView.LayoutManager mLayoutManager1 = new LinearLayoutManager(getApplicationContext());
+        recycler_view_recent.setLayoutManager(mLayoutManager1);
+        recycler_view_recent.setItemAnimator(new DefaultItemAnimator());
+        recycler_view_recent.addItemDecoration(new MyDividerItemDecoration(this, DividerItemDecoration.VERTICAL, 36));
+        recycler_view_recent.setAdapter(mAdapterRecent);
         fetchContacts();
+        fetchRecentContacts();
         search();
+        searchRecent();
     }
+
+    private void fetchRecentContacts() {
+
+
+
+        /*if (response == null) {
+            Toast.makeText(getApplicationContext(), "Couldn't fetch the contacts! Pleas try again.", Toast.LENGTH_LONG).show();
+            return;
+        }*/
+        String order = ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME + " ASC";
+        cursor = getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null,null, null, order);
+        contactList2.clear();
+        while (cursor.moveToNext()) {
+
+            name = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
+
+            phonenumber = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+            image_uri = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.PHOTO_URI));
+
+            String removeSpecialChar= phonenumber.replaceAll("[-+.^:*#_/, ]","");
+            String mobileNumber = null;
+            if(removeSpecialChar.length()==13){
+                mobileNumber= removeSpecialChar.substring(2, 13);
+                //searchView.setText(mobileNumber);
+                phonenumber=mobileNumber;
+                Contact a = new Contact(name, image_uri, phonenumber);
+               // if(phonenumber.equals("01672708329")){
+                    contactList2.add(a);
+               // }else {
+
+                //}
+            }else if(removeSpecialChar.length()==11){
+                //searchView.setText(removeSpecialChar);
+                phonenumber=removeSpecialChar;
+                Contact a = new Contact(name, image_uri, phonenumber);
+
+               // if(phonenumber.equals("01672708329")){
+                    contactList2.add(a);
+               // }else {
+
+               // }
+            }
+            // refreshing recycler view
+            mAdapter.notifyDataSetChanged();
+        }
+
+        cursor.close();
+    }
+
 
     private void search() {
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
@@ -75,26 +138,22 @@ public class ContactActivity extends AppCompatActivity implements ContactsAdapte
             public void afterTextChanged(Editable editable) {
             }
         });
-       /* searchView.setSearchableInfo(searchManager
-                .getSearchableInfo(getComponentName()));
-        searchView.setMaxWidth(Integer.MAX_VALUE);
-
-        // listening to search query text change
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+    }
+    private void searchRecent() {
+        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        searchView = (EditText) findViewById(R.id.inputSearch);
+        searchView.addTextChangedListener(new TextWatcher() {
             @Override
-            public boolean onQueryTextSubmit(String query) {
-                // filter recycler view when query submitted
-                mAdapter.getFilter().filter(query);
-                return false;
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
             }
-
             @Override
-            public boolean onQueryTextChange(String query) {
-                // filter recycler view when text is changed
-                mAdapter.getFilter().filter(query);
-                return false;
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                mAdapterRecent.getFilter().filter(charSequence.toString());
             }
-        });*/
+            @Override
+            public void afterTextChanged(Editable editable) {
+            }
+        });
     }
 
     private void fetchContacts() {
@@ -104,7 +163,8 @@ public class ContactActivity extends AppCompatActivity implements ContactsAdapte
             Toast.makeText(getApplicationContext(), "Couldn't fetch the contacts! Pleas try again.", Toast.LENGTH_LONG).show();
             return;
         }*/
-        cursor = getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null,null, null, null);
+        String order = ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME + " ASC";
+        cursor = getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null,null, null, order);
         contactList.clear();
         while (cursor.moveToNext()) {
 
@@ -113,52 +173,34 @@ public class ContactActivity extends AppCompatActivity implements ContactsAdapte
             phonenumber = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
             image_uri = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.PHOTO_URI));
 
+            String removeSpecialChar= phonenumber.replaceAll("[-+.^:*#_/, ]","");
+            String mobileNumber = null;
+            if(removeSpecialChar.length()==13){
+                mobileNumber= removeSpecialChar.substring(2, 13);
+                //searchView.setText(mobileNumber);
+                phonenumber=mobileNumber;
+                Contact a = new Contact(name, image_uri, phonenumber);
+               // if(phonenumber.equals("01672708329")){
 
-            Contact a = new Contact(name, image_uri, phonenumber);
-            contactList.add(a);
+                //}else {
+                    contactList.add(a);
+                //}
+            }else if(removeSpecialChar.length()==11){
+                //searchView.setText(removeSpecialChar);
+                phonenumber=removeSpecialChar;
+                Contact a = new Contact(name, image_uri, phonenumber);
 
+               // if(phonenumber.equals("01672708329")){
+
+               // }else {
+                    contactList.add(a);
+               // }
+            }
             // refreshing recycler view
             mAdapter.notifyDataSetChanged();
         }
 
         cursor.close();
-        /*List<Contact> items = new Gson().fromJson(response.toString(), new TypeToken<List<Contact>>() {
-        }.getType());*/
-
-        // adding contacts to contacts list
-
-
-
-
-        /*JsonArrayRequest request = new JsonArrayRequest(URL,
-                new Response.Listener<JSONArray>() {
-                    @Override
-                    public void onResponse(JSONArray response) {
-                        if (response == null) {
-                            Toast.makeText(getApplicationContext(), "Couldn't fetch the contacts! Pleas try again.", Toast.LENGTH_LONG).show();
-                            return;
-                        }
-
-                        List<Contact> items = new Gson().fromJson(response.toString(), new TypeToken<List<Contact>>() {
-                        }.getType());
-
-                        // adding contacts to contacts list
-                        contactList.clear();
-                        contactList.addAll(items);
-
-                        // refreshing recycler view
-                        mAdapter.notifyDataSetChanged();
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                // error in getting json
-                Log.e(TAG, "Error: " + error.getMessage());
-                Toast.makeText(getApplicationContext(), "Error: " + error.getMessage(), Toast.LENGTH_SHORT).show();
-            }
-        });*/
-
-
     }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -186,6 +228,11 @@ public class ContactActivity extends AppCompatActivity implements ContactsAdapte
     public void onContactSelected(Contact contact) {
         searchView.setText(contact.getPhone());
         Toast.makeText(getApplicationContext(), "Selected: " + contact.getName() + ", " + contact.getPhone(), Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void onPointerCaptureChanged(boolean hasCapture) {
+
     }
 }
 

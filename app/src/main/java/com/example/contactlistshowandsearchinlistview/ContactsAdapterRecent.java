@@ -20,8 +20,8 @@ import java.util.List;
  * Created by ravi on 16/11/17.
  */
 
-public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.MyViewHolder>
-        implements Filterable {
+public class ContactsAdapterRecent extends RecyclerView.Adapter<ContactsAdapterRecent.MyViewHolder>
+        implements Filterable  {
     private Context context;
     private List<Contact> contactList;
     private List<Contact> contactListFiltered;
@@ -38,7 +38,6 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.MyView
             thumbnail = view.findViewById(R.id.thumbnail);
 
 
-
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -50,7 +49,7 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.MyView
     }
 
 
-    public ContactsAdapter(Context context, List<Contact> contactList, ContactsAdapterListener listener) {
+    public ContactsAdapterRecent(Context context, List<Contact> contactList, ContactsAdapterListener listener) {
         this.context = context;
         this.listener = listener;
         this.contactList = contactList;
@@ -70,9 +69,9 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.MyView
         final Contact contact = contactListFiltered.get(position);
         holder.name.setText(contact.getName());
         holder.phone.setText(contact.getPhone());
-        if ((contact.getImage()==null)){
+        if ((contact.getImage() == null)) {
             holder.thumbnail.setImageResource(R.drawable.avater);
-        }else {
+        } else {
             Glide.with(context)
                     .load(contact.getImage())
                     .apply(RequestOptions.circleCropTransform())

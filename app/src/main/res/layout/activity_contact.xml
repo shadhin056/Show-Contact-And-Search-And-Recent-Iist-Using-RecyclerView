@@ -48,13 +48,49 @@
             android:orientation="vertical"
             android:layout_marginRight="10dp"
             android:layout_marginLeft="10dp"
-            android:layout_marginBottom="1dp"
             android:layout_marginTop="1dp"
             android:padding="10dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
             <TextView
-                android:textColor="@color/black"
+                android:textColor="@color/blue"
+                android:text="Recent Contacts"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+
+
+
+        </LinearLayout>
+        <LinearLayout
+            android:background="@color/white"
+            android:orientation="vertical"
+            android:layout_marginRight="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginBottom="1dp"
+            android:padding="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recycler_view_recent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:scrollbars="vertical" />
+
+
+
+
+        </LinearLayout>
+        <LinearLayout
+            android:background="@color/white"
+            android:orientation="vertical"
+            android:layout_marginRight="10dp"
+            android:layout_marginLeft="10dp"
+            android:padding="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:textColor="@color/blue"
                 android:text="All Contacts"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
@@ -69,7 +105,6 @@
             android:layout_marginRight="10dp"
             android:layout_marginLeft="10dp"
             android:layout_marginBottom="10dp"
-            android:layout_marginTop="1dp"
             android:padding="10dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
