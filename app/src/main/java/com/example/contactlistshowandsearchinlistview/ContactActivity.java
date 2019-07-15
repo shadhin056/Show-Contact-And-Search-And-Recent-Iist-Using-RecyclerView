@@ -46,6 +46,10 @@ public class ContactActivity extends AppCompatActivity implements ContactsAdapte
     String name, phonenumber,image_uri ;
     Cursor cursor ;
     DatabaseHelper databaseHelper;
+    private String nameSelected;
+    private String numberSelected;
+    private String imageSelected;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -82,7 +86,7 @@ public class ContactActivity extends AppCompatActivity implements ContactsAdapte
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                long id= databaseHelper.insertNumber(searchView.getText().toString(),1);
+                long id= databaseHelper.insertNumber(numberSelected,nameSelected,imageSelected,1);
 
                 if (id > 0) {
                     Toast.makeText(getApplicationContext(), "Data is added and id : " + id, Toast.LENGTH_LONG).show();
@@ -251,6 +255,10 @@ public class ContactActivity extends AppCompatActivity implements ContactsAdapte
     @Override
     public void onContactSelected(Contact contact) {
         searchView.setText(contact.getPhone());
+        nameSelected=contact.getName();
+        numberSelected=contact.getPhone();
+        imageSelected=contact.getImage();
+
         Toast.makeText(getApplicationContext(), "Selected: " + contact.getName() + ", " + contact.getPhone(), Toast.LENGTH_LONG).show();
     }
 

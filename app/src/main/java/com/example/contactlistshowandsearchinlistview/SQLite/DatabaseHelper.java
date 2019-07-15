@@ -13,7 +13,7 @@ import static com.example.contactlistshowandsearchinlistview.SQLite.SQLiteData.T
 
 public class DatabaseHelper extends SQLiteOpenHelper {
     // Database Version
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
 
     // Database Name
     private static final String DATABASE_NAME = "bank_asia_smartapp_db";
@@ -41,7 +41,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    public int insertNumber(String number, int count) {
+    public int insertNumber(String number,String name,String image, int count) {
         // get writable database as we want to write data
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();

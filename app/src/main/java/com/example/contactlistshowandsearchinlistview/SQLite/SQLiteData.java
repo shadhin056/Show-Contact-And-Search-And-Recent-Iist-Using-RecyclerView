@@ -5,10 +5,14 @@ public class SQLiteData {
 
     public static final String COLUMN_ID = "id";
     public static final String COLUMN_NUMBER = "number";
+    public static final String COLUMN_NAME = "name";
+    public static final String COLUMN_IMAGE = "name";
     public static final String COLUMN_PRIORITY = "priority";
 
     private Integer id;
     private String number;
+    private Integer name;
+    private Integer image;
     private Integer priority;
 
 
@@ -16,7 +20,7 @@ public class SQLiteData {
     public static final String CREATE_TABLE =
             "CREATE TABLE " + TABLE_NAME + "("
                     + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,"
-                    + COLUMN_NUMBER + " TEXT,"
+                    + COLUMN_NUMBER + " TEXT,"+ COLUMN_NAME + " TEXT,"+ COLUMN_IMAGE + " TEXT,"
                     + COLUMN_PRIORITY + " INTEGER"
                     + ")";
 
