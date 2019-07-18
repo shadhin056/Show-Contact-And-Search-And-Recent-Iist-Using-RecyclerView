@@ -6,13 +6,13 @@ public class SQLiteData {
     public static final String COLUMN_ID = "id";
     public static final String COLUMN_NUMBER = "number";
     public static final String COLUMN_NAME = "name";
-    public static final String COLUMN_IMAGE = "name";
+    public static final String COLUMN_IMAGE = "image";
     public static final String COLUMN_PRIORITY = "priority";
 
     private Integer id;
     private String number;
-    private Integer name;
-    private Integer image;
+    private String name;
+    private String image;
     private Integer priority;
 
 
@@ -27,9 +27,11 @@ public class SQLiteData {
     public SQLiteData() {
     }
 
-    public SQLiteData(Integer id, String number, Integer priority) {
+    public SQLiteData(Integer id, String number, String name, String image, Integer priority) {
         this.id = id;
         this.number = number;
+        this.name = name;
+        this.image = image;
         this.priority = priority;
     }
 
@@ -43,6 +45,14 @@ public class SQLiteData {
 
     public static String getColumnNumber() {
         return COLUMN_NUMBER;
+    }
+
+    public static String getColumnName() {
+        return COLUMN_NAME;
+    }
+
+    public static String getColumnImage() {
+        return COLUMN_IMAGE;
     }
 
     public static String getColumnPriority() {
@@ -63,6 +73,22 @@ public class SQLiteData {
 
     public void setNumber(String number) {
         this.number = number;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 
     public Integer getPriority() {

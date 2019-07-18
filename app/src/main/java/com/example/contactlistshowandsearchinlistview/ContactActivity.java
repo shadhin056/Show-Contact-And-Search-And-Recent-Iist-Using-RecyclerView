@@ -35,6 +35,8 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
+import static com.example.contactlistshowandsearchinlistview.SQLite.SQLiteData.TABLE_NAME;
+
 public class ContactActivity extends AppCompatActivity implements ContactsAdapter.ContactsAdapterListener, ContactsAdapterRecent.ContactsAdapterListener {
     private RecyclerView recyclerView,recycler_view_recent;
     Button submit;
@@ -86,17 +88,12 @@ public class ContactActivity extends AppCompatActivity implements ContactsAdapte
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                long id= databaseHelper.insertNumber(numberSelected,nameSelected,imageSelected,1);
-
-                if (id > 0) {
-                    Toast.makeText(getApplicationContext(), "Data is added and id : " + id, Toast.LENGTH_LONG).show();
-
-                } else {
-                    Toast.makeText(getApplicationContext(), "Can not inserted : ", Toast.LENGTH_LONG).show();
-                }
+                insertOrUpdate(numberSelected,nameSelected,imageSelected,1);
             }
         });
     }
+
+
 
     private void fetchRecentContacts() {
 
@@ -105,11 +102,21 @@ public class ContactActivity extends AppCompatActivity implements ContactsAdapte
         /*if (response == null) {
             Toast.makeText(getApplicationContext(), "Couldn't fetch the contacts! Pleas try again.", Toast.LENGTH_LONG).show();
             return;
+
         }*/
-        String order = ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME + " ASC";
-        cursor = getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null,null, null, order);
+        List<SQLiteData> number = databaseHelper.getNumbers();
         contactList2.clear();
-        while (cursor.moveToNext()) {
+
+        for(int i = 0; i<number.size(); i++){
+            name=number.get(i).getName();
+            phonenumber=number.get(i).getNumber();
+            image_uri=number.get(i).getImage();
+            Contact a = new Contact(name,image_uri, phonenumber);
+            contactList2.add(a);
+            mAdapter.notifyDataSetChanged();
+        }
+        /*
+        while (number.moveToNext()) {
 
             name = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
 
@@ -124,26 +131,27 @@ public class ContactActivity extends AppCompatActivity implements ContactsAdapte
                 phonenumber=mobileNumber;
                 Contact a = new Contact(name, image_uri, phonenumber);
 
-
-                if(databaseHelper.hasNumber(phonenumber)){
+                contactList2.add(a);
+                *//*if(databaseHelper.hasNumber(phonenumber)){
                     contactList2.add(a);
                 }else {
                     contactList.add(a);
-                }
+                }*//*
             }else if(removeSpecialChar.length()==11){
                 //searchView.setText(removeSpecialChar);
                 phonenumber=removeSpecialChar;
                 Contact a = new Contact(name, image_uri, phonenumber);
 
-                if(databaseHelper.hasNumber(phonenumber)){
+               *//* if(databaseHelper.hasNumber(phonenumber)){
                     contactList2.add(a);
                 }else {
                     contactList.add(a);
-                }
+                }*//*
+                contactList2.add(a);
             }
             // refreshing recycler view
             mAdapter.notifyDataSetChanged();
-        }
+        }*/
 
         cursor.close();
     }
@@ -207,22 +215,22 @@ public class ContactActivity extends AppCompatActivity implements ContactsAdapte
                 phonenumber=mobileNumber;
                 Contact a = new Contact(name, image_uri, phonenumber);
 
-
-                if(databaseHelper.hasNumber(phonenumber)){
+                contactList.add(a);
+                /*if(databaseHelper.hasNumber(phonenumber)){
                     contactList2.add(a);
                 }else {
                     contactList.add(a);
-                }
+                }*/
             }else if(removeSpecialChar.length()==11){
                 //searchView.setText(removeSpecialChar);
                 phonenumber=removeSpecialChar;
                 Contact a = new Contact(name, image_uri, phonenumber);
-
-                if(databaseHelper.hasNumber(phonenumber)){
+                contactList.add(a);
+                /*if(databaseHelper.hasNumber(phonenumber)){
                     contactList2.add(a);
                 }else {
                     contactList.add(a);
-                }
+                }*/
             }
             // refreshing recycler view
             mAdapter.notifyDataSetChanged();
@@ -265,6 +273,34 @@ public class ContactActivity extends AppCompatActivity implements ContactsAdapte
     @Override
     public void onPointerCaptureChanged(boolean hasCapture) {
 
+    }
+    public void insertOrUpdate(String numberSelected, String nameSelected, String imageSelected, int i){
+        ContentValues values = new ContentValues();
+        values.put("NAME",numberSelected);
+        values.put("JOB",nameSelected);
+        values.put("JOB",imageSelected);
+        values.put("JOB",i);
+        long idInsert = 0;
+        long idUpdate = 0;
+        int idGet = databaseHelper.getID(numberSelected);
+        if(idGet==-1){
+            idInsert= databaseHelper.insertNumber(numberSelected,nameSelected,imageSelected,1);
+        } else{
+            idUpdate=databaseHelper.update(numberSelected,nameSelected,imageSelected);
+        }
+
+        if (idInsert > 0) {
+            Toast.makeText(getApplicationContext(), "Data is added and id : " + idInsert, Toast.LENGTH_LONG).show();
+
+        } else {
+            Toast.makeText(getApplicationContext(), "Can not inserted : ", Toast.LENGTH_LONG).show();
+        }
+        if (idUpdate > 0) {
+            Toast.makeText(getApplicationContext(), "Data is updated and id : " + idUpdate, Toast.LENGTH_LONG).show();
+
+        } else {
+            Toast.makeText(getApplicationContext(), "Can not updated : ", Toast.LENGTH_LONG).show();
+        }
     }
 }
 

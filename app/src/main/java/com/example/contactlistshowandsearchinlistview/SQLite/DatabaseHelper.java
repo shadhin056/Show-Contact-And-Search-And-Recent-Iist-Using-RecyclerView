@@ -49,6 +49,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         // no need to add them
 
         values.put(SQLiteData.COLUMN_NUMBER, number);
+        values.put(SQLiteData.COLUMN_NAME, name);
+        values.put(SQLiteData.COLUMN_IMAGE, image);
         values.put(SQLiteData.COLUMN_PRIORITY, count);
         // insert row
         int id = (int) db.insert(TABLE_NAME, null, values);
@@ -62,7 +64,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         List<SQLiteData> datas = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.query(TABLE_NAME,
-                new String[]{SQLiteData.COLUMN_ID, SQLiteData.COLUMN_NUMBER, SQLiteData.COLUMN_PRIORITY},
+                new String[]{SQLiteData.COLUMN_ID, SQLiteData.COLUMN_NUMBER,SQLiteData.COLUMN_NAME,SQLiteData.COLUMN_IMAGE, SQLiteData.COLUMN_PRIORITY},
                 SQLiteData.COLUMN_NUMBER + "=?",
                 new String[]{phonenumber}, null, null, null , "1");
         // looping through all rows and adding to list
@@ -76,8 +78,48 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         // return notes list
         return false;
     }
+    public List<SQLiteData> getNumbers() {
+        List<SQLiteData> datas = new ArrayList<>();
+        // get readable database as we are not inserting anything
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.query(TABLE_NAME,
+                new String[]{SQLiteData.COLUMN_ID, SQLiteData.COLUMN_NAME, SQLiteData.COLUMN_IMAGE,SQLiteData.COLUMN_NUMBER,SQLiteData.COLUMN_PRIORITY,},
+                null, null, null, null, null);
+        // looping through all rows and adding to list
+        if (cursor != null && cursor.moveToFirst()) {
+            do {
+                SQLiteData data = new SQLiteData();
+                data.setId(cursor.getInt(cursor.getColumnIndex(SQLiteData.COLUMN_ID)));
+                data.setName(cursor.getString(cursor.getColumnIndex(SQLiteData.COLUMN_NAME)));
+                data.setNumber(cursor.getString(cursor.getColumnIndex(SQLiteData.COLUMN_NUMBER)));
+                data.setImage(cursor.getString(cursor.getColumnIndex(SQLiteData.COLUMN_IMAGE)));
+                data.setPriority(cursor.getInt(cursor.getColumnIndex(SQLiteData.COLUMN_PRIORITY)));
 
+                datas.add(data);
+            } while (cursor.moveToNext());
+        }
+        // close db connection
+        db.close();
+        // return notes list
+        return datas;
+    }
+    public int getID(String number){
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c = db.query(TABLE_NAME,new String[]{"id"},"number =?",new String[]{number},null,null,null,"1");
+        if (c.moveToFirst()) //if the row exist then return the id
+            return c.getInt(c.getColumnIndex("id"));
+        return -1;
+    }
 
+    public long update(String numberSelected, String nameSelected, String imageSelected) {
+        ContentValues cv = new ContentValues();
+        cv.put("Field1","Bob"); //These Fields should be your String values of actual column names
+        cv.put("Field2","19");
+        cv.put("Field2","Male");
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        db.update(TABLE_NAME, cv, "id="+id, null);
+    }
 
    /* public SQLiteData getDataByID(String data) {
         // get readable database as we are not inserting anything
