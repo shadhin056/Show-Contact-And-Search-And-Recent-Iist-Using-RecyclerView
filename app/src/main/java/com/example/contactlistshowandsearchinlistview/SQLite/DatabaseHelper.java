@@ -13,7 +13,7 @@ import static com.example.contactlistshowandsearchinlistview.SQLite.SQLiteData.T
 
 public class DatabaseHelper extends SQLiteOpenHelper {
     // Database Version
-    private static final int DATABASE_VERSION = 2;
+    private static final int DATABASE_VERSION = 1;
 
     // Database Name
     private static final String DATABASE_NAME = "bank_asia_smartapp_db";
@@ -84,7 +84,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.query(TABLE_NAME,
                 new String[]{SQLiteData.COLUMN_ID, SQLiteData.COLUMN_NAME, SQLiteData.COLUMN_IMAGE,SQLiteData.COLUMN_NUMBER,SQLiteData.COLUMN_PRIORITY,},
-                null, null, null, null, null);
+                null, null, null, null, SQLiteData.COLUMN_PRIORITY+" DESC");
         // looping through all rows and adding to list
         if (cursor != null && cursor.moveToFirst()) {
             do {
@@ -112,13 +112,24 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     public long update(String numberSelected, String nameSelected, String imageSelected) {
+        SQLiteDatabase dbCheckPriority = this.getReadableDatabase();
+        Cursor c = dbCheckPriority.query(TABLE_NAME,new String[]{SQLiteData.COLUMN_PRIORITY},"number = ?",new String[]{numberSelected},null,null,null,"1");
+        Integer priorityValue=0;
+        if (c.moveToFirst()) {
+             priorityValue= c.getInt(c.getColumnIndex(SQLiteData.COLUMN_PRIORITY));
+        }priorityValue=priorityValue+1;
+
         ContentValues cv = new ContentValues();
-        cv.put("Field1","Bob"); //These Fields should be your String values of actual column names
-        cv.put("Field2","19");
-        cv.put("Field2","Male");
+        cv.put(SQLiteData.COLUMN_NUMBER,numberSelected); //These Fields should be your String values of actual column names
+        cv.put(SQLiteData.COLUMN_NAME,nameSelected);
+        cv.put(SQLiteData.COLUMN_IMAGE,imageSelected);
+        cv.put(SQLiteData.COLUMN_PRIORITY,priorityValue);
         SQLiteDatabase db = this.getReadableDatabase();
 
-        db.update(TABLE_NAME, cv, "id="+id, null);
+        //Integer a=db.update(TABLE_NAME, cv, "number = "+numberSelected, null);
+        Integer a =db.update(TABLE_NAME, cv, "number = ?", new String[]{numberSelected});
+        return a;
+
     }
 
    /* public SQLiteData getDataByID(String data) {

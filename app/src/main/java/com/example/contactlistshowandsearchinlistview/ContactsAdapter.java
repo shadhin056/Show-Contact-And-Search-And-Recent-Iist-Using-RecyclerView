@@ -28,7 +28,7 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.MyView
     private ContactsAdapterListener listener;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        public TextView name, phone;
+        public TextView name, phone,count;
         public ImageView thumbnail;
 
         public MyViewHolder(View view) {
@@ -36,6 +36,7 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.MyView
             name = view.findViewById(R.id.name);
             phone = view.findViewById(R.id.phone);
             thumbnail = view.findViewById(R.id.thumbnail);
+            count = view.findViewById(R.id.count);
 
 
 
@@ -70,7 +71,8 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.MyView
         final Contact contact = contactListFiltered.get(position);
         holder.name.setText(contact.getName());
         holder.phone.setText(contact.getPhone());
-        if ((contact.getImage()==null)){
+        holder.count.setBackgroundResource(0);
+        if ((contact.getImage()==null)||contact.getImage().equals("")){
             holder.thumbnail.setImageResource(R.drawable.avater);
         }else {
             Glide.with(context)

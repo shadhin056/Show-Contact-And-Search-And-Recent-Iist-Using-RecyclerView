@@ -45,11 +45,12 @@ public class ContactActivity extends AppCompatActivity implements ContactsAdapte
     private ContactsAdapter mAdapter;
     private ContactsAdapterRecent mAdapterRecent;
     private EditText searchView;
-    String name, phonenumber,image_uri ;
+    private EditText inputSearch;
+    String name, phonenumber,image_uri,count ;
     Cursor cursor ;
     DatabaseHelper databaseHelper;
     private String nameSelected;
-    private String numberSelected;
+    private String numberSelected="";
     private String imageSelected;
 
     @Override
@@ -59,6 +60,7 @@ public class ContactActivity extends AppCompatActivity implements ContactsAdapte
 
         databaseHelper = new DatabaseHelper(this);
         recyclerView = findViewById(R.id.recycler_view);
+        inputSearch = findViewById(R.id.inputSearch);
         submit = findViewById(R.id.submit);
         recycler_view_recent = findViewById(R.id.recycler_view_recent);
         contactList = new ArrayList<>();
@@ -88,7 +90,12 @@ public class ContactActivity extends AppCompatActivity implements ContactsAdapte
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                insertOrUpdate(numberSelected,nameSelected,imageSelected,1);
+                if(numberSelected.equals(inputSearch.getText().toString())){
+                    insertOrUpdate(numberSelected,nameSelected,imageSelected,1);
+                }else {
+                    insertOrUpdate(inputSearch.getText().toString(),"","",1);
+                }
+
             }
         });
     }
@@ -109,50 +116,13 @@ public class ContactActivity extends AppCompatActivity implements ContactsAdapte
 
         for(int i = 0; i<number.size(); i++){
             name=number.get(i).getName();
+            count= String.valueOf(number.get(i).getPriority());
             phonenumber=number.get(i).getNumber();
             image_uri=number.get(i).getImage();
-            Contact a = new Contact(name,image_uri, phonenumber);
+            Contact a = new Contact(name,image_uri, phonenumber,count);
             contactList2.add(a);
             mAdapter.notifyDataSetChanged();
         }
-        /*
-        while (number.moveToNext()) {
-
-            name = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
-
-            phonenumber = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
-            image_uri = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.PHOTO_URI));
-
-            String removeSpecialChar= phonenumber.replaceAll("[-+.^:*#_/, ]","");
-            String mobileNumber = null;
-            if(removeSpecialChar.length()==13){
-                mobileNumber= removeSpecialChar.substring(2, 13);
-                //searchView.setText(mobileNumber);
-                phonenumber=mobileNumber;
-                Contact a = new Contact(name, image_uri, phonenumber);
-
-                contactList2.add(a);
-                *//*if(databaseHelper.hasNumber(phonenumber)){
-                    contactList2.add(a);
-                }else {
-                    contactList.add(a);
-                }*//*
-            }else if(removeSpecialChar.length()==11){
-                //searchView.setText(removeSpecialChar);
-                phonenumber=removeSpecialChar;
-                Contact a = new Contact(name, image_uri, phonenumber);
-
-               *//* if(databaseHelper.hasNumber(phonenumber)){
-                    contactList2.add(a);
-                }else {
-                    contactList.add(a);
-                }*//*
-                contactList2.add(a);
-            }
-            // refreshing recycler view
-            mAdapter.notifyDataSetChanged();
-        }*/
-
         cursor.close();
     }
 
@@ -213,7 +183,7 @@ public class ContactActivity extends AppCompatActivity implements ContactsAdapte
                 mobileNumber= removeSpecialChar.substring(2, 13);
                 //searchView.setText(mobileNumber);
                 phonenumber=mobileNumber;
-                Contact a = new Contact(name, image_uri, phonenumber);
+                Contact a = new Contact(name, image_uri, phonenumber,"");
 
                 contactList.add(a);
                 /*if(databaseHelper.hasNumber(phonenumber)){
@@ -224,7 +194,7 @@ public class ContactActivity extends AppCompatActivity implements ContactsAdapte
             }else if(removeSpecialChar.length()==11){
                 //searchView.setText(removeSpecialChar);
                 phonenumber=removeSpecialChar;
-                Contact a = new Contact(name, image_uri, phonenumber);
+                Contact a = new Contact(name, image_uri, phonenumber,"");
                 contactList.add(a);
                 /*if(databaseHelper.hasNumber(phonenumber)){
                     contactList2.add(a);
@@ -275,11 +245,6 @@ public class ContactActivity extends AppCompatActivity implements ContactsAdapte
 
     }
     public void insertOrUpdate(String numberSelected, String nameSelected, String imageSelected, int i){
-        ContentValues values = new ContentValues();
-        values.put("NAME",numberSelected);
-        values.put("JOB",nameSelected);
-        values.put("JOB",imageSelected);
-        values.put("JOB",i);
         long idInsert = 0;
         long idUpdate = 0;
         int idGet = databaseHelper.getID(numberSelected);
@@ -296,7 +261,7 @@ public class ContactActivity extends AppCompatActivity implements ContactsAdapte
             Toast.makeText(getApplicationContext(), "Can not inserted : ", Toast.LENGTH_LONG).show();
         }
         if (idUpdate > 0) {
-            Toast.makeText(getApplicationContext(), "Data is updated and id : " + idUpdate, Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), "Data is updated", Toast.LENGTH_LONG).show();
 
         } else {
             Toast.makeText(getApplicationContext(), "Can not updated : ", Toast.LENGTH_LONG).show();

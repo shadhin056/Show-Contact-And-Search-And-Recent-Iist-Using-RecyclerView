@@ -18,6 +18,7 @@
         android:layout_marginRight="@dimen/row_padding" />
 
     <TextView
+        android:text="Shadhin"
         android:id="@+id/name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -26,15 +27,29 @@
         android:textColor="@color/contact_name"
         android:textSize="@dimen/contact_name" />
 
+
     <TextView
         android:id="@+id/phone"
+        android:text="01672708329"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/name"
         android:layout_toRightOf="@id/thumbnail"
         android:textColor="@color/contact_number"
         android:textSize="@dimen/contact_number" />
-
+    <TextView
+        android:id="@+id/count"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="18dp"
+        android:padding="2dp"
+        android:background="@drawable/round_notification"
+        android:layout_width="wrap_content"
+        android:textAlignment="center"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/phone"
+        android:fontFamily="sans-serif-medium"
+        android:textColor="@color/black"
+        />
     <TextView
         android:layout_width="30dp"
         android:layout_height="30dp"
