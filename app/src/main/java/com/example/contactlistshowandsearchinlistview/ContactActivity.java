@@ -83,10 +83,11 @@ public class ContactActivity extends AppCompatActivity implements ContactsAdapte
         recycler_view_recent.setItemAnimator(new DefaultItemAnimator());
         recycler_view_recent.addItemDecoration(new MyDividerItemDecoration(this, DividerItemDecoration.VERTICAL, 36));
         recycler_view_recent.setAdapter(mAdapterRecent);
-        fetchContacts();
         fetchRecentContacts();
+        fetchContacts();
+
         search();
-        searchRecent();
+       // searchRecent();
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -112,18 +113,23 @@ public class ContactActivity extends AppCompatActivity implements ContactsAdapte
 
         }*/
         List<SQLiteData> number = databaseHelper.getNumbers();
-        contactList2.clear();
-
+        contactList.clear();
+        Contact b = new Contact("recent","recent", "recent","recent");
+        contactList.add(b);
+        mAdapter.notifyDataSetChanged();
         for(int i = 0; i<number.size(); i++){
             name=number.get(i).getName();
             count= String.valueOf(number.get(i).getPriority());
             phonenumber=number.get(i).getNumber();
             image_uri=number.get(i).getImage();
             Contact a = new Contact(name,image_uri, phonenumber,count);
-            contactList2.add(a);
+            contactList.add(a);
             mAdapter.notifyDataSetChanged();
         }
-        cursor.close();
+        Contact c = new Contact("all","all", "all","all");
+        contactList.add(c);
+        mAdapter.notifyDataSetChanged();
+        //cursor.close();
     }
 
 
@@ -169,7 +175,7 @@ public class ContactActivity extends AppCompatActivity implements ContactsAdapte
         }*/
         String order = ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME + " ASC";
         cursor = getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null,null, null, order);
-        contactList.clear();
+        //contactList.clear();
         while (cursor.moveToNext()) {
 
             name = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));

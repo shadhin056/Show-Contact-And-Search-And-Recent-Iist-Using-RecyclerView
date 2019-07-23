@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -28,8 +29,9 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.MyView
     private ContactsAdapterListener listener;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        public TextView name, phone,count;
+        public TextView name, phone,count,tvTitle;
         public ImageView thumbnail;
+        public RelativeLayout rl;
 
         public MyViewHolder(View view) {
             super(view);
@@ -37,6 +39,8 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.MyView
             phone = view.findViewById(R.id.phone);
             thumbnail = view.findViewById(R.id.thumbnail);
             count = view.findViewById(R.id.count);
+            tvTitle = view.findViewById(R.id.tvTitle);
+            rl = view.findViewById(R.id.rl);
 
 
 
@@ -68,17 +72,45 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.MyView
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, final int position) {
+
         final Contact contact = contactListFiltered.get(position);
-        holder.name.setText(contact.getName());
-        holder.phone.setText(contact.getPhone());
-        holder.count.setBackgroundResource(0);
-        if ((contact.getImage()==null)||contact.getImage().equals("")){
-            holder.thumbnail.setImageResource(R.drawable.avater);
-        }else {
-            Glide.with(context)
-                    .load(contact.getImage())
-                    .apply(RequestOptions.circleCropTransform())
-                    .into(holder.thumbnail);
+        if(!contact.getName().equals("all") && !contact.getName().equals("recent")){
+            holder.tvTitle.setVisibility(View.GONE);
+           /* holder.name.setVisibility(View.VISIBLE);
+            holder.phone.setVisibility(View.VISIBLE);
+            holder.count.setVisibility(View.VISIBLE);
+            holder.thumbnail.setVisibility(View.VISIBLE);*/
+            holder.rl.setVisibility(View.VISIBLE);
+
+
+            holder.name.setText(contact.getName());
+            holder.phone.setText(contact.getPhone());
+            holder.count.setBackgroundResource(0);
+            if ((contact.getImage()==null)||contact.getImage().equals("")){
+                holder.thumbnail.setImageResource(R.drawable.avater);
+            }else {
+                Glide.with(context)
+                        .load(contact.getImage())
+                        .apply(RequestOptions.circleCropTransform())
+                        .into(holder.thumbnail);
+            }
+        }
+       else if(contact.getName().equals("all")){
+            holder.tvTitle.setVisibility(View.VISIBLE);
+            /*holder.name.setVisibility(View.GONE);
+            holder.phone.setVisibility(View.GONE);
+            holder.count.setVisibility(View.GONE);
+            holder.thumbnail.setVisibility(View.GONE);*/
+            holder.rl.setVisibility(View.GONE);
+            holder.tvTitle.setText("All Contact");
+        }else if(contact.getName().equals("recent")){
+           /* holder.name.setVisibility(View.GONE);
+            holder.phone.setVisibility(View.GONE);
+            holder.count.setVisibility(View.GONE);
+            holder.thumbnail.setVisibility(View.GONE);*/
+            holder.rl.setVisibility(View.GONE);
+            holder.tvTitle.setVisibility(View.VISIBLE);
+            holder.tvTitle.setText("Recent Contact");
         }
 
     }

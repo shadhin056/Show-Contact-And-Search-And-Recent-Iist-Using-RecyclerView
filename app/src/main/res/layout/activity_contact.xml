@@ -57,6 +57,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent">
         <LinearLayout
+            android:visibility="gone"
             android:background="@color/white"
             android:orientation="vertical"
             android:layout_marginRight="10dp"
@@ -76,6 +77,7 @@
 
         </LinearLayout>
         <LinearLayout
+            android:visibility="gone"
             android:background="@color/white"
             android:orientation="vertical"
             android:layout_marginRight="10dp"
@@ -95,6 +97,7 @@
 
         </LinearLayout>
         <LinearLayout
+            android:visibility="gone"
             android:background="@color/white"
             android:orientation="vertical"
             android:layout_marginRight="10dp"
